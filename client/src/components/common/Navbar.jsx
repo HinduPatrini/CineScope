@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import UserAvatar from '../auth/UserAvatar';
 import { BiMenu, BiX, BiChevronDown, BiSearch } from 'react-icons/bi';
