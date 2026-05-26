@@ -16,8 +16,8 @@ dotenv.config()
 const app = express()
 
 app.use(cors({
-  origin: ["*"]
-  
+  origin: process.env.CLIENT_URL,
+  credentials: true,
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
