@@ -73,7 +73,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop navigation */}
-        <nav className="hidden lg:flex items-center space-x-6 text-sm font-semibold text-neutral-300">
+        <nav className="hidden lg:flex items-center space-x-6 text-sm font-semibold text-brand">
           <NavLink
             to="/"
             end
@@ -116,7 +116,7 @@ const Navbar = () => {
                     key={genre.id}
                     to={`/genres/${genre.id}`}
                     onClick={() => setGenreDropdownOpen(false)}
-                    className="px-3 py-2 text-xs hover:bg-neutral-800 rounded-md text-neutral-300 hover:text-white font-medium transition duration-150"
+                    className="px-3 py-2 text-xs hover:bg-neutral-800 rounded-md text-brand hover:text-white font-medium transition duration-150"
                   >
                     {genre.name}
                   </Link>
