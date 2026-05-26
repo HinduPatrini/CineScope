@@ -14,6 +14,7 @@ const Navbar = () => {
   const [searchVal, setSearchVal] = useState('');
 
   const navigate = useNavigate();
+  const location = useLocation();
   const debouncedSearch = useDebounce(searchVal, 500);
   const inputRef = useRef(null);
 
@@ -28,10 +29,12 @@ const Navbar = () => {
 
   // Navigate to /search when debounced value changes
   useEffect(() => {
-    if (debouncedSearch.trim()) {
+    const params = new URLSearchParams(location.search);
+    const currentQuery = params.get('q') || '';
+    if (location.pathname === '/search' && debouncedSearch.trim() && debouncedSearch.trim() !== currentQuery) {
       navigate(`/search?q=${encodeURIComponent(debouncedSearch.trim())}`);
     }
-  }, [debouncedSearch, navigate]);
+  }, [debouncedSearch, navigate, location]);
 
   const handleSearchChange = (e) => {
     setSearchVal(e.target.value);
@@ -39,10 +42,11 @@ const Navbar = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchVal.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchVal.trim())}`);
-    } else {
-      navigate('/search');
+    const params = new URLSearchParams(location.search);
+    const currentQuery = params.get('q') || '';
+    const target = searchVal.trim() ? `/search?q=${encodeURIComponent(searchVal.trim())}` : '/search';
+    if (target !== location.pathname + (currentQuery ? `?q=${currentQuery}` : '')) {
+      navigate(target);
     }
   };
 
