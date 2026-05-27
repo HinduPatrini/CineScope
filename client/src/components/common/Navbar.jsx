@@ -11,6 +11,7 @@ const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [genreDropdownOpen, setGenreDropdownOpen] = useState(false);
   const [searchVal, setSearchVal] = useState('');
+  const [mobileSearchFocused, setMobileSearchFocused] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -65,7 +66,7 @@ const Navbar = () => {
       }`}
     >
       {/* Brand & Desktop Nav Links */}
-      <div className="flex items-center space-x-8 shrink-0">
+      <div className={`flex items-center space-x-8 shrink-0 ${mobileSearchFocused ? 'hidden lg:flex' : ''}`}>
         <Link
           to="/"
           className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand tracking-tighter hover:scale-105 transition-transform duration-200"
@@ -165,30 +166,42 @@ const Navbar = () => {
       {/* Mobile Search Bar in Nav (visible only on mobile/tablet) */}
       <form
         onSubmit={handleSearchSubmit}
-        className="flex lg:hidden flex-1 mx-1.5 max-w-[115px] sm:max-w-xs items-center bg-neutral-900/80 border border-brand rounded-full px-2 py-1 gap-1 focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500 transition duration-300"
+        className={`flex lg:hidden items-center bg-neutral-900/80 border border-brand rounded-full gap-1 focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500 transition-all duration-300 ${
+          mobileSearchFocused
+            ? 'flex-1 px-3 py-1.5'
+            : 'flex-1 mx-1.5 max-w-[115px] sm:max-w-xs px-2 py-1'
+        }`}
       >
-        <BiSearch className="w-3 h-3 text-neutral-500 shrink-0" />
+        <BiSearch className={`text-neutral-500 shrink-0 ${mobileSearchFocused ? 'w-4 h-4' : 'w-3 h-3'}`} />
         <input
           ref={mobileInputRef}
           type="text"
           value={searchVal}
           onChange={handleSearchChange}
-          placeholder="Search..."
-          className="bg-transparent border-none text-[11px] text-white placeholder-neutral-500 focus:outline-none w-full"
+          onFocus={() => setMobileSearchFocused(true)}
+          onBlur={() => setMobileSearchFocused(false)}
+          placeholder={mobileSearchFocused ? 'Search movies, actors...' : 'Search...'}
+          className={`bg-transparent border-none text-white placeholder-neutral-500 focus:outline-none w-full ${
+            mobileSearchFocused ? 'text-sm' : 'text-[11px]'
+          }`}
         />
-        {searchVal && (
+        {(searchVal || mobileSearchFocused) && (
           <button
             type="button"
-            onClick={handleClearSearch}
+            onClick={() => {
+              handleClearSearch();
+              mobileInputRef.current?.blur();
+              setMobileSearchFocused(false);
+            }}
             className="text-neutral-500 hover:text-white transition shrink-0"
           >
-            <BiX className="w-3.5 h-3.5" />
+            <BiX className="w-4 h-4" />
           </button>
         )}
       </form>
 
       {/* Right: Auth Buttons & Menu trigger */}
-      <div className="flex items-center space-x-2 md:space-x-3 shrink-0">
+      <div className={`flex items-center space-x-2 md:space-x-3 shrink-0 ${mobileSearchFocused ? 'hidden lg:flex' : ''}`}>
         {/* Desktop Auth Section (Sign In / Sign Up) */}
         {!isAuthenticated && (
           <div className="hidden lg:flex items-center space-x-3">
