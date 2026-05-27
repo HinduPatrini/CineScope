@@ -164,41 +164,45 @@ const Navbar = () => {
       </form>
 
       {/* Mobile Search Bar in Nav (visible only on mobile/tablet) */}
-      <form
-        onSubmit={handleSearchSubmit}
-        className={`flex lg:hidden items-center bg-neutral-900/80 border border-brand rounded-full gap-1 focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500 transition-all duration-300 ${
-          mobileSearchFocused
-            ? 'flex-1 px-3 py-1.5'
-            : 'flex-1 mx-1.5 max-w-[115px] sm:max-w-xs px-2 py-1'
-        }`}
-      >
-        <BiSearch className={`text-neutral-500 shrink-0 ${mobileSearchFocused ? 'w-4 h-4' : 'w-3 h-3'}`} />
-        <input
-          ref={mobileInputRef}
-          type="text"
-          value={searchVal}
-          onChange={handleSearchChange}
-          onFocus={() => setMobileSearchFocused(true)}
-          onBlur={() => setMobileSearchFocused(false)}
-          placeholder={mobileSearchFocused ? 'Search movies, actors...' : 'Search...'}
-          className={`bg-transparent border-none text-white placeholder-neutral-500 focus:outline-none w-full ${
-            mobileSearchFocused ? 'text-sm' : 'text-[11px]'
-          }`}
-        />
-        {(searchVal || mobileSearchFocused) && (
+      {!mobileSearchFocused ? (
+        <button
+          type="button"
+          onClick={() => {
+            setMobileSearchFocused(true);
+            setTimeout(() => mobileInputRef.current?.focus(), 50);
+          }}
+          className="flex lg:hidden flex-1 mx-1.5 max-w-[115px] sm:max-w-xs items-center bg-neutral-900/80 border border-brand rounded-full px-2 py-1 gap-1 transition-all duration-300 cursor-text"
+        >
+          <BiSearch className="w-3 h-3 text-neutral-500 shrink-0" />
+          <span className="text-[11px] text-neutral-500 truncate">Search...</span>
+        </button>
+      ) : (
+        <form
+          onSubmit={handleSearchSubmit}
+          className="flex lg:hidden flex-1 items-center bg-neutral-900/80 border border-red-500 ring-1 ring-red-500 rounded-full px-3 py-1.5 gap-2 transition-all duration-300"
+        >
+          <BiSearch className="w-4 h-4 text-neutral-500 shrink-0" />
+          <input
+            ref={mobileInputRef}
+            type="text"
+            value={searchVal}
+            onChange={handleSearchChange}
+            placeholder="Search movies, actors..."
+            className="bg-transparent border-none text-sm text-white placeholder-neutral-500 focus:outline-none w-full"
+          />
           <button
             type="button"
             onClick={() => {
-              handleClearSearch();
-              mobileInputRef.current?.blur();
+              setSearchVal('');
               setMobileSearchFocused(false);
+              mobileInputRef.current?.blur();
             }}
-            className="text-neutral-500 hover:text-white transition shrink-0"
+            className="text-neutral-400 hover:text-white transition shrink-0"
           >
-            <BiX className="w-4 h-4" />
+            <BiX className="w-5 h-5" />
           </button>
-        )}
-      </form>
+        </form>
+      )}
 
       {/* Right: Auth Buttons & Menu trigger */}
       <div className={`flex items-center space-x-2 md:space-x-3 shrink-0 ${mobileSearchFocused ? 'hidden lg:flex' : ''}`}>
