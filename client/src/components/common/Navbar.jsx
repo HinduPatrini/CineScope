@@ -59,7 +59,7 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 py-3 px-4 md:px-12 flex items-center justify-between gap-2 md:gap-4 ${
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 py-3 px-2 sm:px-6 md:px-12 flex items-center justify-between gap-1.5 sm:gap-4 ${
         scrolled
           ? 'bg-[#090909]/95 backdrop-blur-md shadow-lg border-b border-neutral-900/50'
           : 'bg-gradient-to-b from-black/80 to-transparent'
@@ -69,7 +69,7 @@ const Navbar = () => {
       <div className="flex items-center space-x-8 shrink-0">
         <Link
           to="/"
-          className="text-2xl md:text-3xl font-extrabold text-brand tracking-tighter hover:scale-105 transition-transform duration-200"
+          className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand tracking-tighter hover:scale-105 transition-transform duration-200"
         >
           CINE<span className="text-white">SCOPE</span>
         </Link>
@@ -166,16 +166,16 @@ const Navbar = () => {
       {/* Mobile Search Bar in Nav (visible only on mobile/tablet) */}
       <form
         onSubmit={handleSearchSubmit}
-        className="flex lg:hidden flex-1 mx-2 max-w-[150px] sm:max-w-xs md:max-w-md items-center bg-neutral-900/80 border border-brand rounded-full px-3 py-1.5 gap-1.5 focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500 transition duration-300"
+        className="flex lg:hidden flex-1 mx-1.5 max-w-[115px] sm:max-w-xs items-center bg-neutral-900/80 border border-brand rounded-full px-2 py-1 gap-1 focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500 transition duration-300"
       >
-        <BiSearch className="w-3.5 h-3.5 text-neutral-500 shrink-0" />
+        <BiSearch className="w-3 h-3 text-neutral-500 shrink-0" />
         <input
           ref={mobileInputRef}
           type="text"
           value={searchVal}
           onChange={handleSearchChange}
           placeholder="Search..."
-          className="bg-transparent border-none text-xs text-white placeholder-neutral-500 focus:outline-none w-full"
+          className="bg-transparent border-none text-[11px] text-white placeholder-neutral-500 focus:outline-none w-full"
         />
         {searchVal && (
           <button
@@ -239,12 +239,15 @@ const Navbar = () => {
         }`}
       >
         <div className="flex flex-col gap-6">
-          {/* Top Row: Title & Close Button */}
-          <div className="flex justify-between items-center pb-3 border-b border-neutral-800">
-            <span className="text-lg font-bold text-white tracking-wide">Navigation</span>
+          {/* Top Row: User Details (No Title & No Logo) & Close Button */}
+          <div className="flex justify-between items-start pb-3 border-b border-neutral-800 gap-2">
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm font-bold text-white truncate">{user?.name || 'CineScope User'}</span>
+              <span className="text-xs text-neutral-500 truncate">{user?.email || 'Welcome back'}</span>
+            </div>
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="text-neutral-400 hover:text-white p-1 transition"
+              className="text-neutral-400 hover:text-white p-1 transition shrink-0"
             >
               <BiX className="w-7 h-7" />
             </button>
@@ -307,33 +310,18 @@ const Navbar = () => {
         </div>
 
         {/* Bottom Profile / Auth buttons */}
-        <div className="border-t border-neutral-800 pt-6">
+        <div className="border-t border-neutral-800 pt-4">
           {isAuthenticated ? (
-            <div className="flex flex-col gap-3">
-              <Link
-                to="/profile"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800 transition"
-              >
-                <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center font-bold text-white text-sm">
-                  {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                </div>
-                <div className="flex flex-col truncate">
-                  <span className="text-sm font-semibold text-white truncate">{user?.name}</span>
-                  <span className="text-xs text-neutral-500 truncate">{user?.email}</span>
-                </div>
-              </Link>
-              <button
-                onClick={async () => {
-                  setMobileMenuOpen(false);
-                  await logout();
-                  navigate('/');
-                }}
-                className="w-full bg-neutral-800 hover:bg-neutral-700 text-brand text-sm font-bold py-2.5 rounded-lg transition active:scale-95"
-              >
-                Sign Out
-              </button>
-            </div>
+            <button
+              onClick={async () => {
+                setMobileMenuOpen(false);
+                await logout();
+                navigate('/');
+              }}
+              className="w-full bg-neutral-800 hover:bg-neutral-700 text-brand text-sm font-bold py-2.5 rounded-lg transition active:scale-95"
+            >
+              Sign Out
+            </button>
           ) : (
             <div className="flex flex-col gap-3">
               <button
