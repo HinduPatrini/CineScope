@@ -9,7 +9,7 @@ import { useDebounce } from '../../hooks/useDebounce';
 const Navbar = () => {
   const { isAuthenticated, setLoginModalOpen, setRegisterModalOpen, logout, user } = useAuth();
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [genreDropdownOpen, setGenreDropdownOpen] = useState(false);
   const [searchVal, setSearchVal] = useState('');
 
@@ -193,7 +193,7 @@ const Navbar = () => {
         {/* Desktop Auth Section */}
         <div className="hidden lg:flex items-center space-x-3">
           {isAuthenticated ? (
-            <UserAvatar />
+            <UserAvatar onClick={() => setSidebarOpen(true)} />
           ) : (
             <>
               <button
@@ -214,32 +214,36 @@ const Navbar = () => {
 
         {/* Mobile controls */}
         <div className="flex lg:hidden items-center space-x-2">
+          {isAuthenticated && (
+            <UserAvatar onClick={() => setSidebarOpen(true)} />
+          )}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-neutral-300 hover:text-white p-1 cursor-pointer transition active:scale-95"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="text-neutral-350 hover:text-white p-1 cursor-pointer transition active:scale-95"
+            aria-label="Toggle Menu"
           >
-            {mobileMenuOpen ? <BiX className="w-7 h-7" /> : <BiMenu className="w-7 h-7" />}
+            {sidebarOpen ? <BiX className="w-7 h-7" /> : <BiMenu className="w-7 h-7" />}
           </button>
         </div>
       </div>
 
-      {/* Sliding Mobile Sidebar Drawer */}
+      {/* Sliding Sidebar Drawer */}
       {/* Backdrop overlay */}
       <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300 ${
-          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+          sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
-        onClick={() => setMobileMenuOpen(false)}
+        onClick={() => setSidebarOpen(false)}
       />
 
       {/* Sidebar Panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-[280px] sm:w-[320px] bg-dark-200 border-l border-neutral-850 z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
-          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed inset-y-0 right-0 w-[280px] sm:w-[320px] bg-dark-200 border-l border-neutral-850 z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
+          sidebarOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Scrollable Container inside Sidebar */}
-        <div className="flex-1 overflow-y-auto p-6 flex flex-col justify-between min-h-0 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto p-6 flex flex-col justify-between min-h-0">
           <div className="flex flex-col gap-6">
             {/* Top Row: User Details (with Logo) & Close Button */}
             <div className="flex justify-between items-center pb-3 border-b border-neutral-800 gap-3">
@@ -253,8 +257,9 @@ const Navbar = () => {
                 </div>
               </div>
               <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-neutral-400 hover:text-white p-1 transition shrink-0"
+                onClick={() => setSidebarOpen(false)}
+                className="text-neutral-450 hover:text-white p-1 transition shrink-0"
+                aria-label="Close Menu"
               >
                 <BiX className="w-7 h-7" />
               </button>
@@ -264,14 +269,14 @@ const Navbar = () => {
             <nav className="flex flex-col space-y-4 text-base font-semibold text-neutral-300">
               <Link
                 to="/"
-                onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-white py-1 transition"
+                onClick={() => setSidebarOpen(false)}
+                className="hover:text-white py-1 transition lg:hidden"
               >
                 Home
               </Link>
 
               {/* Genres Accordion */}
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 lg:hidden">
                 <button
                   onClick={() => setGenreDropdownOpen(!genreDropdownOpen)}
                   className="hover:text-white flex items-center justify-between w-full py-1 text-left cursor-pointer transition"
@@ -288,8 +293,8 @@ const Navbar = () => {
                       <Link
                         key={genre.id}
                         to={`/genres/${genre.id}`}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="text-sm text-neutral-400 hover:text-white transition duration-150"
+                        onClick={() => setSidebarOpen(false)}
+                        className="text-sm text-neutral-450 hover:text-white transition duration-150"
                       >
                         {genre.name}
                       </Link>
@@ -300,19 +305,32 @@ const Navbar = () => {
 
               <Link
                 to="/search"
-                onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-white py-1 transition"
+                onClick={() => setSidebarOpen(false)}
+                className="hover:text-white py-1 transition lg:hidden"
               >
                 Searchbar (Browse)
               </Link>
 
-              <Link
-                to="/watchlist"
-                onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-white py-1 transition"
-              >
-                Wishlist
-              </Link>
+              {/* Account links - visible on all screens inside sidebar */}
+              {isAuthenticated && (
+                <>
+                  <Link
+                    to="/profile"
+                    onClick={() => setSidebarOpen(false)}
+                    className="hover:text-white py-1 transition flex items-center space-x-2"
+                  >
+                    <span>My Profile</span>
+                  </Link>
+
+                  <Link
+                    to="/watchlist"
+                    onClick={() => setSidebarOpen(false)}
+                    className="hover:text-white py-1 transition flex items-center space-x-2"
+                  >
+                    <span>My Watchlist</span>
+                  </Link>
+                </>
+              )}
             </nav>
           </div>
 
@@ -321,7 +339,7 @@ const Navbar = () => {
             {isAuthenticated ? (
               <button
                 onClick={async () => {
-                  setMobileMenuOpen(false);
+                  setSidebarOpen(false);
                   await logout();
                   navigate('/');
                 }}
@@ -333,7 +351,7 @@ const Navbar = () => {
               <div className="flex flex-col gap-3">
                 <button
                   onClick={() => {
-                    setMobileMenuOpen(false);
+                    setSidebarOpen(false);
                     setLoginModalOpen(true);
                   }}
                   className="w-full border border-neutral-700 text-white font-semibold py-2.5 rounded-lg text-sm hover:bg-neutral-800 transition active:scale-95"
@@ -342,7 +360,7 @@ const Navbar = () => {
                 </button>
                 <button
                   onClick={() => {
-                    setMobileMenuOpen(false);
+                    setSidebarOpen(false);
                     setRegisterModalOpen(true);
                   }}
                   className="w-full bg-brand text-white font-bold py-2.5 rounded-lg text-sm hover:bg-brand/90 transition shadow-md shadow-brand/20 active:scale-95"
