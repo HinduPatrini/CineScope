@@ -214,7 +214,6 @@ const Navbar = () => {
 
         {/* Mobile controls */}
         <div className="flex lg:hidden items-center space-x-2">
-          {isAuthenticated && <UserAvatar />}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="text-neutral-300 hover:text-white p-1 cursor-pointer transition active:scale-95"

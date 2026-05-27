@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { WatchlistProvider } from './context/WatchlistContext';
 import { Toaster } from 'react-hot-toast';
 
@@ -9,9 +9,10 @@ import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
-// Global Modals
+// Global Modals & Gate
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
+import AuthGate from './components/auth/AuthGate';
 
 // Pages
 import Home from './pages/Home';
@@ -22,65 +23,101 @@ import Watchlist from './pages/Watchlist';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 
+function AppContent() {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand"></div>
+      </div>
+    );
+  }
+
+  // Global Auth Gate: Show sign-in/up first on both mobile and laptop
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#1a1a1a',
+              color: '#ffffff',
+              border: '1px solid #333333',
+            },
+          }}
+        />
+        <AuthGate />
+      </>
+    );
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen bg-[#0f0f0f] text-white">
+      {/* Global Toast Notifications */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#1a1a1a',
+            color: '#ffffff',
+            border: '1px solid #333333',
+          },
+        }}
+      />
+
+      {/* Sticky Header Nav */}
+      <Navbar />
+
+      {/* Core Routes Container */}
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/movies/:id" element={<MovieDetail />} />
+          <Route path="/genres/:genreId" element={<Genre />} />
+          
+          {/* Protected Dashboards */}
+          <Route
+            path="/watchlist"
+            element={
+              <ProtectedRoute>
+                <Watchlist />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Catch-all 404 */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+
+      {/* global Modals (controlled via AuthContext triggers) */}
+      <LoginForm />
+      <RegisterForm />
+
+      {/* Footer banner */}
+      <Footer />
+    </div>
+  );
+}
+
 function App() {
   return (
     <AuthProvider>
       <WatchlistProvider>
-        <div className="flex flex-col min-h-screen bg-[#0f0f0f] text-white">
-          {/* Global Toast Notifications */}
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#1a1a1a',
-                color: '#ffffff',
-                border: '1px solid #333333',
-              },
-            }}
-          />
-
-          {/* Sticky Header Nav */}
-          <Navbar />
-
-          {/* Core Routes Container */}
-          <div className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/movies/:id" element={<MovieDetail />} />
-              <Route path="/genres/:genreId" element={<Genre />} />
-              
-              {/* Protected Dashboards */}
-              <Route
-                path="/watchlist"
-                element={
-                  <ProtectedRoute>
-                    <Watchlist />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* Catch-all 404 */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
-
-          {/* global Modals (controlled via AuthContext triggers) */}
-          <LoginForm />
-          <RegisterForm />
-
-          {/* Footer banner */}
-          <Footer />
-        </div>
+        <AppContent />
       </WatchlistProvider>
     </AuthProvider>
   );
