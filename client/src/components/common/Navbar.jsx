@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import UserAvatar from '../auth/UserAvatar';
 import { BiMenu, BiX, BiChevronDown, BiSearch } from 'react-icons/bi';
 import { GENRES } from '../../utils/constants';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -188,43 +187,36 @@ const Navbar = () => {
         )}
       </form>
 
-      {/* Right: Auth Buttons / User Avatar + Mobile trigger */}
+      {/* Right: Auth Buttons & Menu trigger */}
       <div className="flex items-center space-x-2 md:space-x-3 shrink-0">
-        {/* Desktop Auth Section */}
-        <div className="hidden lg:flex items-center space-x-3">
-          {isAuthenticated ? (
-            <UserAvatar onClick={() => setSidebarOpen(true)} />
-          ) : (
-            <>
-              <button
-                onClick={() => setLoginModalOpen(true)}
-                className="text-white hover:text-brand font-semibold text-sm px-4 py-2 transition"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => setRegisterModalOpen(true)}
-                className="bg-brand text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-brand/90 transition shadow-md shadow-brand/20 active:scale-95"
-              >
-                Sign Up
-              </button>
-            </>
-          )}
-        </div>
+        {/* Desktop Auth Section (Sign In / Sign Up) */}
+        {!isAuthenticated && (
+          <div className="hidden lg:flex items-center space-x-3">
+            <button
+              onClick={() => setLoginModalOpen(true)}
+              className="text-white hover:text-brand font-semibold text-sm px-4 py-2 transition"
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => setRegisterModalOpen(true)}
+              className="bg-brand text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-brand/90 transition shadow-md shadow-brand/20 active:scale-95"
+            >
+              Sign Up
+            </button>
+          </div>
+        )}
 
-        {/* Mobile controls */}
-        <div className="flex lg:hidden items-center space-x-2">
-          {isAuthenticated && (
-            <UserAvatar onClick={() => setSidebarOpen(true)} />
-          )}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-neutral-350 hover:text-white p-1 cursor-pointer transition active:scale-95"
-            aria-label="Toggle Menu"
-          >
-            {sidebarOpen ? <BiX className="w-7 h-7" /> : <BiMenu className="w-7 h-7" />}
-          </button>
-        </div>
+        {/* Sidebar Trigger (Hamburger Menu) - visible on mobile always, on desktop only when authenticated */}
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className={`text-neutral-350 hover:text-white p-1 cursor-pointer transition active:scale-95 ${
+            isAuthenticated ? 'flex' : 'flex lg:hidden'
+          }`}
+          aria-label="Toggle Menu"
+        >
+          {sidebarOpen ? <BiX className="w-7 h-7" /> : <BiMenu className="w-7 h-7" />}
+        </button>
       </div>
 
       {/* Sliding Sidebar Drawer */}
@@ -238,8 +230,8 @@ const Navbar = () => {
 
       {/* Sidebar Panel */}
       <div
-        className={`fixed inset-y-0 right-0 w-[280px] sm:w-[320px] bg-dark-200 border-l border-neutral-850 z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed top-0 left-0 h-screen w-[280px] bg-black border-r border-neutral-850 z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Scrollable Container inside Sidebar */}
