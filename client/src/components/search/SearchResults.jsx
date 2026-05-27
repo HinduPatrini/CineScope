@@ -19,7 +19,7 @@ const SearchResults = ({ movies, isLoading, isError, hasNextPage, isFetchingNext
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
         {[...Array(10)].map((_, idx) => (
           <SkeletonCard key={idx} />
         ))}
@@ -51,7 +51,7 @@ const SearchResults = ({ movies, isLoading, isError, hasNextPage, isFetchingNext
       {/* Infinite Scroll Trigger & Skeleton loader for next page */}
       <div ref={ref} className="w-full flex items-center justify-center py-6">
         {isFetchingNextPage && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-full">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6 w-full">
             {[...Array(5)].map((_, idx) => (
               <SkeletonCard key={idx} />
             ))}

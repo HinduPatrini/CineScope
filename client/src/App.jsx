@@ -55,7 +55,7 @@ function AppContent() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#0f0f0f] text-white">
+    <div className="flex flex-col min-h-screen bg-[#0f0f0f] text-white overflow-x-hidden">
       {/* Global Toast Notifications */}
       <Toaster
         position="top-right"

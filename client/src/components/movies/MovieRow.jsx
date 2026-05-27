@@ -12,7 +12,7 @@ const MovieRow = ({ title, movies }) => {
   if (!movies || movies.length === 0) return null;
 
   return (
-    <div className="relative group/row space-y-3 px-6 md:px-12 select-none">
+    <div className="relative group/row space-y-3 px-4 sm:px-6 md:px-12 select-none overflow-hidden">
       {/* Title */}
       <h2 className="text-xl md:text-2xl font-extrabold text-white tracking-wide hover:text-brand transition-colors duration-200 cursor-pointer inline-block">
         {title}
@@ -34,7 +34,7 @@ const MovieRow = ({ title, movies }) => {
             1024: { slidesPerView: 5, spaceBetween: 24 },
             1280: { slidesPerView: 6, spaceBetween: 24 },
           }}
-          className="movie-swiper !overflow-visible"
+          className="movie-swiper"
         >
           {movies.map((movie, idx) => (
             <SwiperSlide key={`${movie.imdbID || movie.movieId}-${idx}`} className="!h-auto">
@@ -45,13 +45,13 @@ const MovieRow = ({ title, movies }) => {
 
         {/* Custom Navigation Controls */}
         <button
-          className={`swiper-button-prev-${title.replace(/\s+/g, '-')} absolute left-0 top-1/2 -translate-y-1/2 -ml-6 md:-ml-10 z-10 w-10 h-16 bg-black/60 hover:bg-black/95 text-white flex items-center justify-center rounded-r-lg opacity-0 group-hover/row:opacity-100 transition-all duration-300 border border-l-0 border-neutral-800 disabled:!hidden cursor-pointer active:scale-95`}
+          className={`swiper-button-prev-${title.replace(/\s+/g, '-')} absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-16 bg-black/60 hover:bg-black/95 text-white flex items-center justify-center rounded-r-lg opacity-0 group-hover/row:opacity-100 transition-all duration-300 border border-l-0 border-neutral-800 disabled:!hidden cursor-pointer active:scale-95`}
         >
           <BiChevronLeft className="w-8 h-8" />
         </button>
 
         <button
-          className={`swiper-button-next-${title.replace(/\s+/g, '-')} absolute right-0 top-1/2 -translate-y-1/2 -mr-6 md:-mr-10 z-10 w-10 h-16 bg-black/60 hover:bg-black/95 text-white flex items-center justify-center rounded-l-lg opacity-0 group-hover/row:opacity-100 transition-all duration-300 border border-r-0 border-neutral-800 disabled:!hidden cursor-pointer active:scale-95`}
+          className={`swiper-button-next-${title.replace(/\s+/g, '-')} absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-16 bg-black/60 hover:bg-black/95 text-white flex items-center justify-center rounded-l-lg opacity-0 group-hover/row:opacity-100 transition-all duration-300 border border-r-0 border-neutral-800 disabled:!hidden cursor-pointer active:scale-95`}
         >
           <BiChevronRight className="w-8 h-8" />
         </button>

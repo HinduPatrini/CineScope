@@ -38,7 +38,7 @@ const MovieHero = ({ movie }) => {
   const isPosterNA = !Poster || Poster === 'N/A';
 
   return (
-    <div className="relative min-h-[50vh] md:min-h-[70vh] bg-dark-300 py-24 md:py-32 px-6 md:px-12 flex items-center justify-center">
+    <div className="relative min-h-[50vh] md:min-h-[70vh] bg-dark-300 py-24 md:py-32 px-4 sm:px-6 md:px-12 flex items-center justify-center">
       {/* Blurred Backsplash Backdrop */}
       <div className="absolute inset-0 z-0 overflow-hidden select-none">
         <img

@@ -5,7 +5,7 @@ const CastRow = ({ cast }) => {
   if (!cast || cast.length === 0) return null;
 
   return (
-    <div className="space-y-4 px-6 md:px-12 select-none max-w-7xl mx-auto w-full">
+    <div className="space-y-4 px-4 sm:px-6 md:px-12 select-none max-w-7xl mx-auto w-full">
       <h3 className="text-lg md:text-xl font-extrabold text-white tracking-wide">
         Starring Cast
       </h3>

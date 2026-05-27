@@ -47,7 +47,7 @@ const HeroBanner = ({ trendingMovie }) => {
       </div>
 
       {/* Main Spotlight Details */}
-      <div className="absolute inset-0 z-10 flex items-center px-6 md:px-12 max-w-7xl mx-auto">
+      <div className="absolute inset-0 z-10 flex items-center px-4 sm:px-6 md:px-12 max-w-7xl mx-auto">
         <div className="max-w-2xl space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700">
           {/* Genre & Rating tags */}
           <div className="flex flex-wrap items-center gap-3">
@@ -92,7 +92,7 @@ const HeroBanner = ({ trendingMovie }) => {
             {/* Play Button */}
             <button
               onClick={handlePlayClick}
-              className="flex items-center space-x-2 bg-white text-dark-300 hover:bg-neutral-200 font-extrabold px-6 py-3.5 rounded-lg text-sm md:text-base cursor-pointer transition transform active:scale-95 shadow-xl shadow-black/30"
+              className="flex items-center space-x-2 bg-white text-dark-300 hover:bg-neutral-200 font-extrabold px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-lg text-xs sm:text-sm md:text-base cursor-pointer transition transform active:scale-95 shadow-xl shadow-black/30"
             >
               <BiPlay className="w-6 md:w-7 h-6 md:h-7 fill-current" />
               <span>Watch Trailer</span>
@@ -101,7 +101,7 @@ const HeroBanner = ({ trendingMovie }) => {
             {/* Watchlist Toggle */}
             <button
               onClick={handleWatchlistToggle}
-              className={`flex items-center space-x-2 border font-bold px-6 py-3.5 rounded-lg text-sm md:text-base cursor-pointer transition transform active:scale-95 shadow-xl ${
+              className={`flex items-center space-x-2 border font-bold px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-lg text-xs sm:text-sm md:text-base cursor-pointer transition transform active:scale-95 shadow-xl ${
                 isWatchlisted
                   ? 'bg-neutral-800/80 border-neutral-700 text-white hover:bg-neutral-800'
                   : 'bg-black/40 border-neutral-600 text-white hover:bg-black/60'
@@ -114,7 +114,7 @@ const HeroBanner = ({ trendingMovie }) => {
             {/* Info Button */}
             <Link
               to={`/movies/${imdbID}`}
-              className="flex items-center space-x-2 bg-neutral-800/80 border border-neutral-700/50 hover:bg-neutral-800 text-white font-bold px-6 py-3.5 rounded-lg text-sm md:text-base transition transform active:scale-95 shadow-xl shadow-black/10"
+              className="flex items-center space-x-2 bg-neutral-800/80 border border-neutral-700/50 hover:bg-neutral-800 text-white font-bold px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-lg text-xs sm:text-sm md:text-base transition transform active:scale-95 shadow-xl shadow-black/10"
             >
               <BiInfoCircle className="w-5 h-5" />
               <span>Details</span>

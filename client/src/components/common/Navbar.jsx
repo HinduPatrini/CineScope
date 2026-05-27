@@ -234,116 +234,124 @@ const Navbar = () => {
 
       {/* Sidebar Panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-[280px] sm:w-[320px] bg-dark-200 border-l border-neutral-850 z-50 p-6 flex flex-col justify-between shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
+        className={`fixed top-0 right-0 h-full w-[280px] sm:w-[320px] bg-dark-200 border-l border-neutral-850 z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
           mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex flex-col gap-6">
-          {/* Top Row: User Details (No Title & No Logo) & Close Button */}
-          <div className="flex justify-between items-start pb-3 border-b border-neutral-800 gap-2">
-            <div className="flex flex-col min-w-0">
-              <span className="text-sm font-bold text-white truncate">{user?.name || 'CineScope User'}</span>
-              <span className="text-xs text-neutral-500 truncate">{user?.email || 'Welcome back'}</span>
+        {/* Scrollable Container inside Sidebar */}
+        <div className="flex-1 overflow-y-auto p-6 flex flex-col justify-between min-h-0 scrollbar-hide">
+          <div className="flex flex-col gap-6">
+            {/* Top Row: User Details (with Logo) & Close Button */}
+            <div className="flex justify-between items-center pb-3 border-b border-neutral-800 gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center font-bold text-white text-sm shrink-0 shadow-md">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-sm font-bold text-white truncate">{user?.name || 'CineScope User'}</span>
+                  <span className="text-xs text-neutral-500 truncate">{user?.email || 'Welcome back'}</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-neutral-400 hover:text-white p-1 transition shrink-0"
+              >
+                <BiX className="w-7 h-7" />
+              </button>
             </div>
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-neutral-400 hover:text-white p-1 transition shrink-0"
-            >
-              <BiX className="w-7 h-7" />
-            </button>
+
+            {/* Navigation Links */}
+            <nav className="flex flex-col space-y-4 text-base font-semibold text-neutral-300">
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-white py-1 transition"
+              >
+                Home
+              </Link>
+
+              {/* Genres Accordion */}
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => setGenreDropdownOpen(!genreDropdownOpen)}
+                  className="hover:text-white flex items-center justify-between w-full py-1 text-left cursor-pointer transition"
+                >
+                  <span>Genre</span>
+                  <BiChevronDown
+                    className={`w-5 h-5 transition-transform duration-200 ${genreDropdownOpen ? 'rotate-180' : ''}`}
+                  />
+                </button>
+
+                {genreDropdownOpen && (
+                  <div className="grid grid-cols-2 gap-2 pl-3 py-2 border-l border-neutral-800 animate-in slide-in-from-top-2 duration-200">
+                    {GENRES.map((genre) => (
+                      <Link
+                        key={genre.id}
+                        to={`/genres/${genre.id}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-sm text-neutral-400 hover:text-white transition duration-150"
+                      >
+                        {genre.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <Link
+                to="/search"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-white py-1 transition"
+              >
+                Searchbar (Browse)
+              </Link>
+
+              <Link
+                to="/watchlist"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-white py-1 transition"
+              >
+                Wishlist
+              </Link>
+            </nav>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="flex flex-col space-y-4 text-base font-semibold text-neutral-300">
-            <Link
-              to="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-white py-1 transition"
-            >
-              Home
-            </Link>
-
-            {/* Genres Accordion */}
-            <div className="flex flex-col gap-2">
+          {/* Bottom Profile / Auth buttons */}
+          <div className="border-t border-neutral-800 pt-4 mt-6">
+            {isAuthenticated ? (
               <button
-                onClick={() => setGenreDropdownOpen(!genreDropdownOpen)}
-                className="hover:text-white flex items-center justify-between w-full py-1 text-left cursor-pointer transition"
-              >
-                <span>Genre</span>
-                <BiChevronDown
-                  className={`w-5 h-5 transition-transform duration-200 ${genreDropdownOpen ? 'rotate-180' : ''}`}
-                />
-              </button>
-
-              {genreDropdownOpen && (
-                <div className="grid grid-cols-2 gap-2 pl-3 py-2 border-l border-neutral-800 animate-in slide-in-from-top-2 duration-200">
-                  {GENRES.map((genre) => (
-                    <Link
-                      key={genre.id}
-                      to={`/genres/${genre.id}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-sm text-neutral-400 hover:text-white transition duration-150"
-                    >
-                      {genre.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <Link
-              to="/search"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-white py-1 transition"
-            >
-              Searchbar (Browse)
-            </Link>
-
-            <Link
-              to="/watchlist"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-white py-1 transition"
-            >
-              Wishlist
-            </Link>
-          </nav>
-        </div>
-
-        {/* Bottom Profile / Auth buttons */}
-        <div className="border-t border-neutral-800 pt-4">
-          {isAuthenticated ? (
-            <button
-              onClick={async () => {
-                setMobileMenuOpen(false);
-                await logout();
-                navigate('/');
-              }}
-              className="w-full bg-neutral-800 hover:bg-neutral-700 text-brand text-sm font-bold py-2.5 rounded-lg transition active:scale-95"
-            >
-              Sign Out
-            </button>
-          ) : (
-            <div className="flex flex-col gap-3">
-              <button
-                onClick={() => {
+                onClick={async () => {
                   setMobileMenuOpen(false);
-                  setLoginModalOpen(true);
+                  await logout();
+                  navigate('/');
                 }}
-                className="w-full border border-neutral-700 text-white font-semibold py-2.5 rounded-lg text-sm hover:bg-neutral-800 transition active:scale-95"
+                className="w-full bg-neutral-800 hover:bg-neutral-700 text-brand text-sm font-bold py-2.5 rounded-lg transition active:scale-95"
               >
-                Sign In
+                Sign Out
               </button>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setRegisterModalOpen(true);
-                }}
-                className="w-full bg-brand text-white font-bold py-2.5 rounded-lg text-sm hover:bg-brand/90 transition shadow-md shadow-brand/20 active:scale-95"
-              >
-                Sign Up
-              </button>
-            </div>
-          )}
+            ) : (
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setLoginModalOpen(true);
+                  }}
+                  className="w-full border border-neutral-700 text-white font-semibold py-2.5 rounded-lg text-sm hover:bg-neutral-800 transition active:scale-95"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setRegisterModalOpen(true);
+                  }}
+                  className="w-full bg-brand text-white font-bold py-2.5 rounded-lg text-sm hover:bg-brand/90 transition shadow-md shadow-brand/20 active:scale-95"
+                >
+                  Sign Up
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>

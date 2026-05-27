@@ -11,7 +11,7 @@ const MovieCard = ({ movie }) => {
   return (
     <Link
       to={`/movies/${imdbID}`}
-      className="group relative bg-dark-100 rounded-xl overflow-hidden border border-neutral-800/80 hover:border-brand/40 shadow-lg hover:shadow-brand/5 flex flex-col h-[360px] md:h-[400px] w-full transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer"
+      className="group relative bg-dark-100 rounded-xl overflow-hidden border border-neutral-800/80 hover:border-brand/40 shadow-lg hover:shadow-brand/5 flex flex-col h-[280px] sm:h-[340px] md:h-[400px] w-full transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer"
     >
       {/* Poster / Thumbnail Container */}
       <div className="relative flex-grow overflow-hidden bg-neutral-900 flex items-center justify-center">

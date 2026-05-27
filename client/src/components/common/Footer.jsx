@@ -6,7 +6,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-dark-300 border-t border-neutral-900 pt-16 pb-8 px-6 md:px-12 text-sm text-neutral-500 font-medium">
+    <footer className="bg-dark-300 border-t border-neutral-900 pt-16 pb-8 px-4 sm:px-6 md:px-12 text-sm text-neutral-500 font-medium">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">
         {/* CineScope Brand Info */}
         <div className="space-y-4">

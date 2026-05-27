@@ -29,7 +29,7 @@ const Genre = () => {
   const movies = data ? data.pages.flatMap((page) => page.results || []) : [];
 
   return (
-    <main className="min-h-screen bg-dark-300 pt-28 pb-16 px-6 md:px-12 select-none text-white">
+    <main className="min-h-screen bg-dark-300 pt-28 pb-16 px-4 sm:px-6 md:px-12 select-none text-white">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Navigation Breadcrumb */}

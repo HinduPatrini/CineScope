@@ -43,7 +43,7 @@ const Profile = () => {
   const firstLetter = user?.name ? user.name.charAt(0).toUpperCase() : 'U';
 
   return (
-    <main className="min-h-screen bg-dark-300 pt-28 pb-16 px-6 md:px-12 text-white">
+    <main className="min-h-screen bg-dark-300 pt-28 pb-16 px-4 sm:px-6 md:px-12 text-white">
       <div className="max-w-7xl mx-auto space-y-8 select-none">
         
         {/* Profile Card Section */}
@@ -64,7 +64,7 @@ const Profile = () => {
         </div>
 
         {/* Dashboard Grid split panel */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 md:gap-8">
           
           {/* Left panel: My Reviews */}
           <div className="bg-dark-100 border border-neutral-850 p-6 rounded-2xl space-y-6">
@@ -180,7 +180,7 @@ const Profile = () => {
                       
                       {/* Metadata info */}
                       <div className="overflow-hidden space-y-0.5">
-                        <h4 className="text-xs font-bold text-white truncate w-56 hover:text-brand" title={item.title}>
+                        <h4 className="text-xs font-bold text-white truncate max-w-full hover:text-brand" title={item.title}>
                           {item.title}
                         </h4>
                         <p className="text-[10px] text-neutral-500 font-semibold">

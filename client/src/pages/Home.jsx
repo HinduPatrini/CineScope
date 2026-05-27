@@ -39,7 +39,7 @@ const Home = () => {
       {spotlightMovie && <HeroBanner trendingMovie={spotlightMovie} />}
 
       {/* 2. Genre filter pills */}
-      <div className="px-6 md:px-12 max-w-7xl mx-auto w-full space-y-3 pt-6 md:pt-0">
+      <div className="px-4 sm:px-6 md:px-12 max-w-7xl mx-auto w-full space-y-3 pt-6 md:pt-0">
         <h3 className="text-xs font-bold text-neutral-450 uppercase tracking-widest">
           Quick Genre Filter
         </h3>

@@ -70,13 +70,13 @@ const MovieDetail = () => {
   };
 
   return (
-    <div className="pb-24 space-y-12 bg-dark-300 min-h-screen text-white select-none">
+    <div className="pb-24 space-y-12 bg-dark-300 min-h-screen text-white select-none overflow-x-hidden">
       
       {/* 1. Statistics Details Header Backdrop */}
       <MovieHero movie={movie} />
 
       {/* 2. Custom Trailer Frame Section */}
-      <div className="max-w-7xl mx-auto w-full px-6 md:px-12">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-12">
         {isPlayingTrailer ? (
           <div className="bg-dark-100 border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl space-y-4 p-6">
             <div className="flex items-center justify-between border-b border-neutral-900 pb-3">
@@ -118,7 +118,7 @@ const MovieDetail = () => {
       {similar && <SimilarMovies movies={similar} />}
 
       {/* 5. User Reviews Board Layout */}
-      <div className="max-w-7xl mx-auto w-full px-6 md:px-12 grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 border-t border-neutral-900 pt-12">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-12 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 md:gap-8 border-t border-neutral-900 pt-12">
         {/* Left Col: Chronological Reviews */}
         <div className="space-y-6">
           <ReviewList movieId={movie.imdbID} />
@@ -126,7 +126,7 @@ const MovieDetail = () => {
 
         {/* Right Col: Sticky review form input */}
         <div className="space-y-6">
-          <div className="bg-dark-100 border border-neutral-850 p-6 rounded-2xl sticky top-24 space-y-4">
+          <div className="bg-dark-100 border border-neutral-850 p-6 rounded-2xl lg:sticky lg:top-24 space-y-4">
             <h4 className="text-sm font-extrabold text-white uppercase tracking-wider">
               Share Your Thoughts
             </h4>

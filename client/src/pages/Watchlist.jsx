@@ -8,7 +8,7 @@ const Watchlist = () => {
   const { watchlist, loading } = useWatchlist();
 
   return (
-    <main className="min-h-screen bg-dark-300 pt-28 pb-16 px-6 md:px-12 text-white">
+    <main className="min-h-screen bg-dark-300 pt-28 pb-16 px-4 sm:px-6 md:px-12 text-white">
       <div className="max-w-7xl mx-auto space-y-8 select-none">
         
         {/* Header */}
