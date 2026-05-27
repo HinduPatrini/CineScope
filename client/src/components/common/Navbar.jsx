@@ -7,7 +7,7 @@ import { GENRES } from '../../utils/constants';
 import { useDebounce } from '../../hooks/useDebounce';
 
 const Navbar = () => {
-  const { isAuthenticated, setLoginModalOpen, setRegisterModalOpen } = useAuth();
+  const { isAuthenticated, setLoginModalOpen, setRegisterModalOpen, logout, user } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [genreDropdownOpen, setGenreDropdownOpen] = useState(false);
@@ -17,6 +17,7 @@ const Navbar = () => {
   const location = useLocation();
   const debouncedSearch = useDebounce(searchVal, 500);
   const inputRef = useRef(null);
+  const mobileInputRef = useRef(null);
 
   // Scroll listener — darkens navbar on scroll
   useEffect(() => {
@@ -53,11 +54,12 @@ const Navbar = () => {
   const handleClearSearch = () => {
     setSearchVal('');
     inputRef.current?.focus();
+    mobileInputRef.current?.focus();
   };
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 py-3 px-6 md:px-12 flex items-center justify-between gap-4 ${
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 py-3 px-4 md:px-12 flex items-center justify-between gap-2 md:gap-4 ${
         scrolled
           ? 'bg-[#090909]/95 backdrop-blur-md shadow-lg border-b border-neutral-900/50'
           : 'bg-gradient-to-b from-black/80 to-transparent'
@@ -139,7 +141,7 @@ const Navbar = () => {
       {/* Centre: Search Bar — always visible on desktop */}
       <form
         onSubmit={handleSearchSubmit}
-        className="hidden md:flex flex-1 max-w-sm items-center bg-neutral-900/80 border border-neutral-800 rounded-full px-4 py-2 gap-2 focus-within:border-brand/60 transition duration-300"
+        className="hidden lg:flex flex-1 max-w-sm items-center bg-neutral-900/80 border border-brand rounded-full px-4 py-2 gap-2 focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500 transition duration-300"
       >
         <BiSearch className="w-4 h-4 text-neutral-500 shrink-0" />
         <input
@@ -161,108 +163,202 @@ const Navbar = () => {
         )}
       </form>
 
-      {/* Right: Auth Buttons / User Avatar + Mobile trigger */}
-      <div className="flex items-center space-x-3 shrink-0">
-        {isAuthenticated ? (
-          <UserAvatar />
-        ) : (
-          <div className="hidden sm:flex items-center space-x-3">
-            <button
-              onClick={() => setLoginModalOpen(true)}
-              className="text-white hover:text-brand font-semibold text-sm px-4 py-2 transition"
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => setRegisterModalOpen(true)}
-              className="bg-brand text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-brand/90 transition shadow-md shadow-brand/20 active:scale-95"
-            >
-              Sign Up
-            </button>
-          </div>
-        )}
-
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden text-neutral-300 hover:text-white p-1"
-        >
-          {mobileMenuOpen ? <BiX className="w-7 h-7" /> : <BiMenu className="w-7 h-7" />}
-        </button>
-      </div>
-
-      {/* Mobile Menu Drawer */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 top-[64px] bg-dark-300/98 z-30 lg:hidden flex flex-col p-6 space-y-6">
-          {/* Mobile Search */}
-          <form
-            onSubmit={handleSearchSubmit}
-            className="flex items-center bg-neutral-900 border border-neutral-800 rounded-full px-4 py-2 gap-2 focus-within:border-brand/60 transition"
+      {/* Mobile Search Bar in Nav (visible only on mobile/tablet) */}
+      <form
+        onSubmit={handleSearchSubmit}
+        className="flex lg:hidden flex-1 mx-2 max-w-[150px] sm:max-w-xs md:max-w-md items-center bg-neutral-900/80 border border-brand rounded-full px-3 py-1.5 gap-1.5 focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500 transition duration-300"
+      >
+        <BiSearch className="w-3.5 h-3.5 text-neutral-500 shrink-0" />
+        <input
+          ref={mobileInputRef}
+          type="text"
+          value={searchVal}
+          onChange={handleSearchChange}
+          placeholder="Search..."
+          className="bg-transparent border-none text-xs text-white placeholder-neutral-500 focus:outline-none w-full"
+        />
+        {searchVal && (
+          <button
+            type="button"
+            onClick={handleClearSearch}
+            className="text-neutral-500 hover:text-white transition shrink-0"
           >
-            <BiSearch className="w-4 h-4 text-neutral-500 shrink-0" />
-            <input
-              type="text"
-              value={searchVal}
-              onChange={handleSearchChange}
-              placeholder="Search movies, actors..."
-              className="bg-transparent border-none text-sm text-white placeholder-neutral-500 focus:outline-none w-full"
-            />
-            {searchVal && (
-              <button type="button" onClick={handleClearSearch} className="text-neutral-500 hover:text-white transition">
-                <BiX className="w-4 h-4" />
-              </button>
-            )}
-          </form>
+            <BiX className="w-3.5 h-3.5" />
+          </button>
+        )}
+      </form>
 
-          <nav className="flex flex-col space-y-4 text-lg font-semibold text-neutral-300">
-            <Link to="/" onClick={() => setMobileMenuOpen(false)} className="hover:text-white">
-              Home
-            </Link>
-            <Link to="/search" onClick={() => setMobileMenuOpen(false)} className="hover:text-white">
-              Browse Movies
-            </Link>
-            <div>
-              <p className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-3 mt-1">Genres</p>
-              <div className="grid grid-cols-2 gap-2 pl-2">
-                {GENRES.map((genre) => (
-                  <Link
-                    key={genre.id}
-                    to={`/genres/${genre.id}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-sm text-neutral-400 hover:text-white transition duration-150"
-                  >
-                    {genre.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <Link
-              to="/watchlist"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-white border-t border-neutral-800 pt-4"
-            >
-              Watchlist
-            </Link>
-          </nav>
-
-          {!isAuthenticated && (
-            <div className="flex flex-col space-y-3 pt-4 border-t border-neutral-800">
+      {/* Right: Auth Buttons / User Avatar + Mobile trigger */}
+      <div className="flex items-center space-x-2 md:space-x-3 shrink-0">
+        {/* Desktop Auth Section */}
+        <div className="hidden lg:flex items-center space-x-3">
+          {isAuthenticated ? (
+            <UserAvatar />
+          ) : (
+            <>
               <button
-                onClick={() => { setMobileMenuOpen(false); setLoginModalOpen(true); }}
-                className="w-full border border-neutral-700 text-white font-semibold py-2.5 rounded-lg text-sm hover:bg-neutral-800"
+                onClick={() => setLoginModalOpen(true)}
+                className="text-white hover:text-brand font-semibold text-sm px-4 py-2 transition"
               >
                 Sign In
               </button>
               <button
-                onClick={() => { setMobileMenuOpen(false); setRegisterModalOpen(true); }}
-                className="w-full bg-brand text-white font-bold py-2.5 rounded-lg text-sm hover:bg-brand/90"
+                onClick={() => setRegisterModalOpen(true)}
+                className="bg-brand text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-brand/90 transition shadow-md shadow-brand/20 active:scale-95"
+              >
+                Sign Up
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Mobile controls */}
+        <div className="flex lg:hidden items-center space-x-2">
+          {isAuthenticated && <UserAvatar />}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="text-neutral-300 hover:text-white p-1 cursor-pointer transition active:scale-95"
+          >
+            {mobileMenuOpen ? <BiX className="w-7 h-7" /> : <BiMenu className="w-7 h-7" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Sliding Mobile Sidebar Drawer */}
+      {/* Backdrop overlay */}
+      <div
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300 ${
+          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setMobileMenuOpen(false)}
+      />
+
+      {/* Sidebar Panel */}
+      <div
+        className={`fixed top-0 right-0 h-full w-[280px] sm:w-[320px] bg-dark-200 border-l border-neutral-850 z-50 p-6 flex flex-col justify-between shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
+          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex flex-col gap-6">
+          {/* Top Row: Title & Close Button */}
+          <div className="flex justify-between items-center pb-3 border-b border-neutral-800">
+            <span className="text-lg font-bold text-white tracking-wide">Navigation</span>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-neutral-400 hover:text-white p-1 transition"
+            >
+              <BiX className="w-7 h-7" />
+            </button>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="flex flex-col space-y-4 text-base font-semibold text-neutral-300">
+            <Link
+              to="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-white py-1 transition"
+            >
+              Home
+            </Link>
+
+            {/* Genres Accordion */}
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => setGenreDropdownOpen(!genreDropdownOpen)}
+                className="hover:text-white flex items-center justify-between w-full py-1 text-left cursor-pointer transition"
+              >
+                <span>Genre</span>
+                <BiChevronDown
+                  className={`w-5 h-5 transition-transform duration-200 ${genreDropdownOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {genreDropdownOpen && (
+                <div className="grid grid-cols-2 gap-2 pl-3 py-2 border-l border-neutral-800 animate-in slide-in-from-top-2 duration-200">
+                  {GENRES.map((genre) => (
+                    <Link
+                      key={genre.id}
+                      to={`/genres/${genre.id}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-sm text-neutral-400 hover:text-white transition duration-150"
+                    >
+                      {genre.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <Link
+              to="/search"
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-white py-1 transition"
+            >
+              Searchbar (Browse)
+            </Link>
+
+            <Link
+              to="/watchlist"
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-white py-1 transition"
+            >
+              Wishlist
+            </Link>
+          </nav>
+        </div>
+
+        {/* Bottom Profile / Auth buttons */}
+        <div className="border-t border-neutral-800 pt-6">
+          {isAuthenticated ? (
+            <div className="flex flex-col gap-3">
+              <Link
+                to="/profile"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-neutral-800 transition"
+              >
+                <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center font-bold text-white text-sm">
+                  {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <div className="flex flex-col truncate">
+                  <span className="text-sm font-semibold text-white truncate">{user?.name}</span>
+                  <span className="text-xs text-neutral-500 truncate">{user?.email}</span>
+                </div>
+              </Link>
+              <button
+                onClick={async () => {
+                  setMobileMenuOpen(false);
+                  await logout();
+                  navigate('/');
+                }}
+                className="w-full bg-neutral-800 hover:bg-neutral-700 text-brand text-sm font-bold py-2.5 rounded-lg transition active:scale-95"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setLoginModalOpen(true);
+                }}
+                className="w-full border border-neutral-700 text-white font-semibold py-2.5 rounded-lg text-sm hover:bg-neutral-800 transition active:scale-95"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setRegisterModalOpen(true);
+                }}
+                className="w-full bg-brand text-white font-bold py-2.5 rounded-lg text-sm hover:bg-brand/90 transition shadow-md shadow-brand/20 active:scale-95"
               >
                 Sign Up
               </button>
             </div>
           )}
         </div>
-      )}
+      </div>
     </header>
   );
 };
